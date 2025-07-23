@@ -75,7 +75,7 @@ const Signup = () => {
           title: "Account Created!",
           description: "Welcome to AI Fitness Assistant!",
         });
-        navigate('/dashboard');
+        navigate('/chat');
       }
     } catch (error) {
       console.error('Signup error:', error);

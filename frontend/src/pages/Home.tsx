@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Activity, MessageSquare, BarChart3, Shield } from 'lucide-react';
 
-const Index = () => {
+const Home = () => {
   return (
     <div className="min-h-screen gradient-bg">
       {/* Header */}
@@ -142,4 +142,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Home;

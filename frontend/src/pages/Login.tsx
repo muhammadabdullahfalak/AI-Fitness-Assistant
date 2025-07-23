@@ -44,7 +44,7 @@ const Login = () => {
           title: "Welcome back!",
           description: "You have successfully logged in.",
         });
-        navigate('/dashboard');
+        navigate('/chat');
       }
     } catch (error) {
       // Error handling is done in the slice

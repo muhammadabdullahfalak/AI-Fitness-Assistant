@@ -17,7 +17,7 @@ import type { AppDispatch } from '@/store';
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
-const Dashboard = () => {
+const Chat = () => {
   const { user, logout } = useAuth();
   const { chatStarted, userProfile } = useFitnessChat();
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -94,4 +94,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Chat;

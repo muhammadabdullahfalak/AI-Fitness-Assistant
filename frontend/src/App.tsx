@@ -9,10 +9,10 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { PublicRoute } from '@/components/PublicRoute';
 
 // Pages
-import Index from "./pages/Index";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +26,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={
               <PublicRoute>
                 <Login />
@@ -39,9 +39,9 @@ const App = () => (
             } />
             
             {/* Protected Routes */}
-            <Route path="/dashboard" element={
+            <Route path="/chat" element={
               <ProtectedRoute>
-                <Dashboard />
+                <Chat />
               </ProtectedRoute>
             } />
             
