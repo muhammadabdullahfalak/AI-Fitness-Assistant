@@ -11,6 +11,7 @@ interface ChatState {
   userProfile: UserProfile;
   isLoading: boolean;
   error: string | null;
+  chatStarted: boolean;
 }
 
 const initialState: ChatState = {
@@ -23,6 +24,7 @@ const initialState: ChatState = {
   },
   isLoading: false,
   error: null,
+  chatStarted: false,
 };
 
 // Async thunks
@@ -134,6 +136,33 @@ const chatSlice = createSlice({
     clearCurrentThread: (state) => {
       state.currentThread = null;
     },
+
+    setChatStarted: (state, action: PayloadAction<boolean>) => {
+      state.chatStarted = action.payload;
+    },
+    resetChatStarted: (state) => {
+      state.chatStarted = false;
+    },
+
+    createThreadWithWelcome: (state, action: PayloadAction<string>) => {
+      const newThread: ChatThread = {
+        id: generateThreadId(),
+        title: 'New Chat',
+        messages: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      const welcomeMessage: ChatMessage = {
+        id: generateMessageId(),
+        timestamp: new Date(),
+        sender: 'ai',
+        text: action.payload,
+      };
+      newThread.messages.push(welcomeMessage);
+      newThread.updatedAt = new Date();
+      state.currentThread = newThread;
+      state.threads.push(newThread);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -187,6 +216,9 @@ export const {
   updateCurrentThreadTitle,
   clearError,
   clearCurrentThread,
+  createThreadWithWelcome,
+  setChatStarted,
+  resetChatStarted,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
