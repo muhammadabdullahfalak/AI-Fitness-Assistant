@@ -21,7 +21,7 @@ export const loginUser = createAsyncThunk(
       const response = await apiClient.post(API_ENDPOINTS.LOGIN, credentials);
       
       if (response.success) {
-        const { user, token } = response.data as { user: User; token: string };
+        const { user, token } = response.data as { user: User; token: string; success: boolean };
         setToken(token);
         setUserInStorage(user);
         return { user, token };

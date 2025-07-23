@@ -16,7 +16,13 @@ export const signup = async (req: Request, res: Response) => {
   const user = await createUser(email, password_hash);
 
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
-  res.json({ token, user: { id: user.id, email: user.email } });
+  res.json({
+    success: true,
+    data: {
+      token,
+      user: { id: user.id, email: user.email }
+    }
+  });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -30,7 +36,13 @@ export const login = async (req: Request, res: Response) => {
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
 
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
-  res.json({ token, user: { id: user.id, email: user.email } });
+  res.json({
+    success: true,
+    data: {
+      token,
+      user: { id: user.id, email: user.email }
+    }
+  });
 };
 
 export const logout = async (_req: Request, res: Response) => {
