@@ -1,0 +1,81 @@
+// Main dashboard page with chat interface
+
+import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useFitnessChat } from '@/hooks/useFitnessChat';
+import { ChatSidebar } from '@/features/chat/ChatSidebar';
+import { ChatInterface } from '@/features/chat/ChatInterface';
+import { ProfileSetup } from '@/features/chat/ProfileSetup';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
+import { LogOut, Activity } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+
+const Dashboard = () => {
+  const { user, logout } = useAuth();
+  const { chatStarted, userProfile } = useFitnessChat();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const isProfileComplete = userProfile.age && userProfile.weight;
+
+  return (
+    <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
+      <div className="min-h-screen w-full flex bg-background">
+        {/* Sidebar */}
+        <ChatSidebar />
+        
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="h-16 border-b bg-card/50 backdrop-blur-sm flex items-center justify-between px-4">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger />
+              <div className="flex items-center gap-2">
+                <Activity className="w-6 h-6 text-primary" />
+                <h1 className="text-xl font-semibold">AI Fitness Assistant</h1>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">
+                Welcome back, {user?.name}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </div>
+          </header>
+          
+          {/* Main Chat Area */}
+          <div className="flex-1 overflow-hidden">
+            {!isProfileComplete || !chatStarted ? (
+              <ProfileSetup />
+            ) : (
+              <ChatInterface />
+            )}
+          </div>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+};
+
+export default Dashboard;
