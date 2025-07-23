@@ -3,6 +3,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread, enterNewChatMode, exitNewChatMode } from '@/store/slices/chatSlice';
+import { Link } from 'react-router-dom';
 import { 
   Sidebar,
   SidebarContent,
@@ -68,10 +69,10 @@ export const ChatSidebar = () => {
       <SidebarContent className="bg-sidebar">
         {/* Header */}
         <div className="p-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-2 mb-4">
+          <Link to="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
             <Activity className="w-6 h-6 text-sidebar-primary" />
             <span className="font-semibold text-sidebar-foreground">AI Fitness</span>
-          </div>
+          </Link>
           
           <Button
             onClick={handleNewChat}

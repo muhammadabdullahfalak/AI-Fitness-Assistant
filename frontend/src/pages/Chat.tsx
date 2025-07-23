@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchChatHistory } from '@/store/slices/chatSlice';
 import { RootState } from '@/store';
 import type { AppDispatch } from '@/store';
+import { Link } from 'react-router-dom';
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
@@ -59,10 +60,10 @@ const Chat = () => {
           <header className="h-16 border-b bg-card/50 backdrop-blur-sm flex items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <SidebarTrigger />
-              <div className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                 <Activity className="w-6 h-6 text-primary" />
                 <h1 className="text-xl font-semibold">AI Fitness Assistant</h1>
-              </div>
+              </Link>
             </div>
             
             <div className="flex items-center gap-4">

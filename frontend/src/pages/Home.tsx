@@ -11,10 +11,10 @@ const Home = () => {
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Activity className="w-8 h-8 text-primary" />
             <span className="text-xl font-bold">AI Fitness Assistant</span>
-          </div>
+          </Link>
           
           <div className="flex items-center gap-4">
             <Button variant="ghost" asChild>
@@ -131,11 +131,11 @@ const Home = () => {
       {/* Footer */}
       <footer className="border-t bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <Link to="/" className="flex items-center justify-center gap-2 mb-4 hover:opacity-80 transition-opacity">
             <Activity className="w-5 h-5 text-primary" />
             <span className="font-semibold">AI Fitness Assistant</span>
-          </div>
-          <p>&copy; 2024 AI Fitness Assistant. All rights reserved.</p>
+          </Link>
+          <p>&copy; 2025 AI Fitness Assistant. All rights reserved.</p>
         </div>
       </footer>
     </div>
