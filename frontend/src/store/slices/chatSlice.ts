@@ -34,10 +34,14 @@ export const fetchChatHistory = createAsyncThunk(
   'chat/fetchHistory',
   async (user_id: string, { rejectWithValue }) => {
     try {
-      const response: { success: boolean; threads?: ChatThread[]; error?: string } = await apiClient.get(`${API_ENDPOINTS.CHAT_HISTORY}?user_id=${user_id}`);
-      
+      const response: { success: boolean; threads?: any[]; error?: string } = await apiClient.get(`${API_ENDPOINTS.CHAT_HISTORY}?user_id=${user_id}`);
       if (response.success) {
-        return response.threads || [];
+        // Map backend snake_case to frontend camelCase
+        return (response.threads || []).map((thread: any) => ({
+          ...thread,
+          updatedAt: thread.updated_at,
+          createdAt: thread.created_at,
+        }));
       } else {
         return rejectWithValue(response.error || 'Failed to fetch chat history');
       }
@@ -116,9 +120,17 @@ const chatSlice = createSlice({
       };
       state.currentThread.messages.push(message);
       state.currentThread.updatedAt = now;
+
       // Update title if it's the first user message
       if (action.payload.sender === 'user' && state.currentThread.title === 'New Chat') {
         state.currentThread.title = action.payload.text.slice(0, 30) + (action.payload.text.length > 30 ? '...' : '');
+
+        // Also update the thread in the threads array
+        const idx = state.threads.findIndex(t => t.id === state.currentThread!.id);
+        if (idx !== -1) {
+          state.threads[idx].title = state.currentThread.title;
+          state.threads[idx].updatedAt = now;
+        }
       }
     },
     

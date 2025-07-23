@@ -88,8 +88,18 @@ const Chat = () => {
             ) : currentThread ? (
               <ChatInterface />
             ) : (
-              <div className="flex-1 flex items-center justify-center text-muted-foreground">
-                Select a conversation or start a new chat.
+              <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-background">
+                <div className="max-w-md w-full mx-auto text-center">
+                  <div className="flex justify-center mb-4">
+                    <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h2m10 0V6a4 4 0 00-8 0v2m8 0H7" />
+                    </svg>
+                  </div>
+                  <div className="bg-card/80 rounded-xl shadow p-8">
+                    <h2 className="text-2xl font-semibold mb-2 text-primary">Welcome to AI Fitness Chat</h2>
+                    <p className="text-muted-foreground text-lg">Select a conversation or start a new chat to begin your fitness journey.</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
