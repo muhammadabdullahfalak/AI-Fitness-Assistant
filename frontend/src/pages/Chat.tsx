@@ -19,7 +19,8 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 
 const Chat = () => {
   const { user, logout } = useAuth();
-  const { chatStarted, userProfile } = useFitnessChat();
+  const { chatStarted, userProfile, currentThread } = useFitnessChat();
+  const newChatMode = useSelector((state: RootState) => state.chat.newChatMode);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
   const { user: currentUser } = useSelector((state: RootState) => state.auth);
@@ -44,7 +45,7 @@ const Chat = () => {
     }
   };
 
-  const isProfileComplete = userProfile.age && userProfile.weight;
+  console.log('currentThread:', currentThread, 'chatStarted:', chatStarted);
 
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -82,10 +83,14 @@ const Chat = () => {
           
           {/* Main Chat Area */}
           <div className="flex-1 overflow-hidden">
-            {!isProfileComplete || !chatStarted ? (
+            {newChatMode ? (
               <ProfileSetup />
-            ) : (
+            ) : currentThread ? (
               <ChatInterface />
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-muted-foreground">
+                Select a conversation or start a new chat.
+              </div>
             )}
           </div>
         </div>

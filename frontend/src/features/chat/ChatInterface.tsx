@@ -12,7 +12,7 @@ import { Send, Bot, User, Loader2 } from 'lucide-react';
 import { ChatMessage } from './ChatMessage';
 
 export const ChatInterface = () => {
-  const { currentThread } = useSelector((state: RootState) => state.chat);
+  const currentThread = useSelector((state: RootState) => state.chat.currentThread);
   const { sendMessage, chatState } = useFitnessChat();
   const [input, setInput] = useState('');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -45,19 +45,7 @@ export const ChatInterface = () => {
   };
 
   if (!currentThread) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Bot className="w-16 h-16 text-muted-foreground mx-auto" />
-          <h2 className="text-xl font-semibold text-muted-foreground">
-            No conversation selected
-          </h2>
-          <p className="text-muted-foreground">
-            Start a new chat or select an existing conversation
-          </p>
-        </div>
-      </div>
-    );
+    // Show "No conversation selected"
   }
 
   return (

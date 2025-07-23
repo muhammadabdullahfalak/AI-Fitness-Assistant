@@ -8,9 +8,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Activity, User, Scale, Calendar } from 'lucide-react';
 import { getBMIAnalysis } from '@/utils/bmi';
+import { useDispatch, useSelector } from 'react-redux';
+import { exitNewChatMode, setChatStarted, createThreadWithWelcome } from '@/store/slices/chatSlice';
+import { RootState } from '@/store';
 
 export const ProfileSetup = () => {
-  const { userProfile, updateProfile, startChat, chatStarted } = useFitnessChat();
+  const { userProfile, updateProfile, chatStarted } = useFitnessChat();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateProfile('age', e.target.value);
@@ -40,6 +45,14 @@ export const ProfileSetup = () => {
   };
 
   const bmiInfo = getBMIInfo();
+
+  const startChat = () => {
+    // ...profile validation...
+    const welcomeMessage = `🏋️ Welcome to your AI Fitness Assistant! I'm here to help you with personalized fitness advice based on your profile:\n\n👤 **Age:** ${userProfile.age}\n⚧ **Sex:** ${userProfile.sex}\n⚖️ **Weight:** ${userProfile.weight}kg\n\nFeel free to ask me anything about fitness, workouts, nutrition, or health! How can I help you today?`;
+    dispatch(setChatStarted(true));
+    dispatch(createThreadWithWelcome({ user_id: user.id, welcome: welcomeMessage }));
+    dispatch(exitNewChatMode());
+  };
 
   if (chatStarted) {
     return null; // Let ChatInterface handle the chat

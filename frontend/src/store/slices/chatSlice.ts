@@ -12,6 +12,7 @@ interface ChatState {
   isLoading: boolean;
   error: string | null;
   chatStarted: boolean;
+  newChatMode: boolean;
 }
 
 const initialState: ChatState = {
@@ -25,6 +26,7 @@ const initialState: ChatState = {
   isLoading: false,
   error: null,
   chatStarted: false,
+  newChatMode: false,
 };
 
 // Async thunks
@@ -166,6 +168,13 @@ const chatSlice = createSlice({
       state.currentThread = newThread;
       state.threads.unshift(newThread); // Add to top
     },
+    enterNewChatMode: (state) => {
+      state.newChatMode = true;
+      state.currentThread = null;
+    },
+    exitNewChatMode: (state) => {
+      state.newChatMode = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -222,6 +231,8 @@ export const {
   createThreadWithWelcome,
   setChatStarted,
   resetChatStarted,
+  enterNewChatMode,
+  exitNewChatMode,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

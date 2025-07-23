@@ -2,7 +2,7 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread } from '@/store/slices/chatSlice';
+import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread, enterNewChatMode, exitNewChatMode } from '@/store/slices/chatSlice';
 import { 
   Sidebar,
   SidebarContent,
@@ -23,18 +23,20 @@ export const ChatSidebar = () => {
   const { threads, currentThread } = useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const handleNewChat = async () => {
+  const handleNewChat = () => {
+    dispatch(enterNewChatMode());
+  };
+
+  const handleSelectThread = async (threadId: string) => {
+    // Exit new chat mode if active
+    dispatch(exitNewChatMode());
+
+    // Save current chat if needed
     if (currentThread && currentThread.messages.length > 0 && user) {
       await dispatch(saveChatThread({ ...currentThread, user_id: user.id }));
     }
-    dispatch(startNewThread(user.id));
-    toast({
-      title: "New Chat",
-      description: "Started a new conversation.",
-    });
-  };
 
-  const handleSelectThread = (threadId: string) => {
+    // Set the selected thread as current
     const thread = threads.find(t => t.id === threadId);
     if (thread) {
       dispatch(setCurrentThread(thread));
@@ -96,7 +98,7 @@ export const ChatSidebar = () => {
                 threads.map((thread) => (
                   <SidebarMenuItem key={thread.id}>
                     <SidebarMenuButton
-                      onClick={() => handleSelectThread(thread.id)}
+                      onClick={async () => await handleSelectThread(thread.id)}
                       className={`w-full justify-between group ${
                         currentThread?.id === thread.id 
                           ? 'bg-sidebar-accent text-sidebar-accent-foreground' 
