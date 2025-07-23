@@ -22,6 +22,7 @@ export interface ChatState {
 
 export interface ChatThread {
   id: string;
+  user_id: string;
   title: string;
   messages: ChatMessage[];
   createdAt: string;

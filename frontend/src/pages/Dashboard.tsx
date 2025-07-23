@@ -1,6 +1,6 @@
 // Main dashboard page with chat interface
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useFitnessChat } from '@/hooks/useFitnessChat';
 import { ChatSidebar } from '@/features/chat/ChatSidebar';
@@ -10,11 +10,27 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { LogOut, Activity } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchChatHistory } from '@/store/slices/chatSlice';
+import { RootState } from '@/store';
+import type { AppDispatch } from '@/store';
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const { chatStarted, userProfile } = useFitnessChat();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const { user: currentUser } = useSelector((state: RootState) => state.auth);
+
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      dispatch(fetchChatHistory(currentUser.id));
+    }
+  }, [currentUser, dispatch]);
+
 
   const handleLogout = async () => {
     try {

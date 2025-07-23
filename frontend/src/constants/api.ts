@@ -14,7 +14,7 @@ export const API_ENDPOINTS = {
   GEMINI: '/api/gemini',
   CHAT_HISTORY: '/api/chat/history',
   SAVE_CHAT: '/api/chat/save',
-  DELETE_CHAT: '/api/chat/delete',
+  DELETE_CHAT: '/api/chat', // not '/api/chat/delete'
   
   // User data
   USER_PROFILE: '/api/user/profile',

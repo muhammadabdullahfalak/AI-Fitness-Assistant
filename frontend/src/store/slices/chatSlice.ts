@@ -30,12 +30,12 @@ const initialState: ChatState = {
 // Async thunks
 export const fetchChatHistory = createAsyncThunk(
   'chat/fetchHistory',
-  async (_, { rejectWithValue }) => {
+  async (user_id: string, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.CHAT_HISTORY);
+      const response: { success: boolean; threads?: ChatThread[]; error?: string } = await apiClient.get(`${API_ENDPOINTS.CHAT_HISTORY}?user_id=${user_id}`);
       
       if (response.success) {
-        return (response.data as { threads: ChatThread[] }).threads || [];
+        return response.threads || [];
       } else {
         return rejectWithValue(response.error || 'Failed to fetch chat history');
       }
@@ -90,16 +90,18 @@ const chatSlice = createSlice({
       state.userProfile = { ...state.userProfile, ...action.payload };
     },
     
-    startNewThread: (state) => {
+    startNewThread: (state, action: PayloadAction<string>) => {
       const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
+        user_id: action.payload, // <-- set user_id
         title: 'New Chat',
         messages: [],
         createdAt: now,
         updatedAt: now,
       };
       state.currentThread = newThread;
+      state.threads.unshift(newThread); // Add to top
     },
     
     addMessage: (state, action: PayloadAction<Omit<ChatMessage, 'id' | 'timestamp'>>) => {
@@ -143,10 +145,11 @@ const chatSlice = createSlice({
       state.chatStarted = false;
     },
 
-    createThreadWithWelcome: (state, action: PayloadAction<string>) => {
+    createThreadWithWelcome: (state, action: PayloadAction<{ user_id: string, welcome: string }>) => {
       const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
+        user_id: action.payload.user_id, // <-- set user_id
         title: 'New Chat',
         messages: [],
         createdAt: now,
@@ -156,12 +159,12 @@ const chatSlice = createSlice({
         id: generateMessageId(),
         timestamp: now,
         sender: 'ai',
-        text: action.payload,
+        text: action.payload.welcome,
       };
       newThread.messages.push(welcomeMessage);
       newThread.updatedAt = now;
       state.currentThread = newThread;
-      state.threads.push(newThread);
+      state.threads.unshift(newThread); // Add to top
     },
   },
   extraReducers: (builder) => {

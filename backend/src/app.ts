@@ -3,6 +3,7 @@ import cors from 'cors';
 import geminiRouter from './routes/gemini.routes';
 import authRouter from './routes/auth.routes';
 import { Request, Response, NextFunction } from 'express';
+import chatRoutes from './routes/chat.routes';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/api/gemini', geminiRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/chat', chatRoutes);
 
 // Error handler (must be after all routes)
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

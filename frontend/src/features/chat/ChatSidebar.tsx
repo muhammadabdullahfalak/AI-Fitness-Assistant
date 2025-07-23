@@ -2,7 +2,7 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread } from '@/store/slices/chatSlice';
+import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread } from '@/store/slices/chatSlice';
 import { 
   Sidebar,
   SidebarContent,
@@ -21,9 +21,13 @@ import type { AppDispatch } from '@/store';
 export const ChatSidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { threads, currentThread } = useSelector((state: RootState) => state.chat);
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  const handleNewChat = () => {
-    dispatch(startNewThread());
+  const handleNewChat = async () => {
+    if (currentThread && currentThread.messages.length > 0 && user) {
+      await dispatch(saveChatThread({ ...currentThread, user_id: user.id }));
+    }
+    dispatch(startNewThread(user.id));
     toast({
       title: "New Chat",
       description: "Started a new conversation.",
@@ -46,7 +50,7 @@ export const ChatSidebar = () => {
     });
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     const now = new Date();
     const threadDate = new Date(date);
     const diffInDays = Math.floor((now.getTime() - threadDate.getTime()) / (1000 * 60 * 60 * 24));
