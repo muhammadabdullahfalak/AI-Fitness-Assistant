@@ -8,6 +8,8 @@ import { API_ENDPOINTS } from '@/constants/api';
 import { apiClient } from '@/utils/api';
 import type { AppDispatch } from '@/store';
 
+type GeminiApiResponse = { success: boolean; text?: string; error?: string };
+
 export const useFitnessChat = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { currentThread, userProfile, chatStarted } = useSelector((state: RootState) => state.chat);
@@ -64,23 +66,22 @@ User question: ${userInput}
 Provide helpful, personalized advice based on their profile. Be encouraging and motivational!
 `;
 
-      const response = await apiClient.post(API_ENDPOINTS.GEMINI, { prompt });
+      const response: GeminiApiResponse = await apiClient.post(API_ENDPOINTS.GEMINI, { prompt });
       
       if (response.success) {
-        const data = response.data as FitnessApiResponse;
         dispatch(addMessage({
           sender: 'ai',
-          text: data.text,
+          text: response.text || '', // fallback to empty string if text is missing
         }));
+        return; // Prevent falling through to error case
       } else {
-        throw new Error(response.error || 'Failed to get response');
+        throw new Error(response.text || response.error || 'Failed to get response');
       }
 
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
         title: "Error",
-        description: "Failed to get response. Please try again.",
+        description: error instanceof Error ? error.message : String(error),
         variant: "destructive"
       });
     } finally {

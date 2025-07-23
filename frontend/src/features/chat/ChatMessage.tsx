@@ -13,7 +13,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
   const isUser = message.sender === 'user';
   const isAI = message.sender === 'ai';
 
-  const formatTime = (date: Date) => {
+  const formatTime = (date: string) => {
     return new Date(date).toLocaleTimeString([], { 
       hour: '2-digit', 
       minute: '2-digit' 
@@ -77,7 +77,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
           <CardContent className="p-4">
             <div className={cn(
               "text-sm leading-relaxed whitespace-pre-wrap",
-              isUser ? "text-white" : "text-foreground"
+              isUser ? "text-foreground" : "text-foreground"
             )}>
               {isAI ? formatMessageText(message.text) : message.text}
             </div>

@@ -10,7 +10,7 @@ export interface ChatMessage {
   id: string;
   sender: 'user' | 'ai';
   text: string;
-  timestamp: Date;
+  timestamp: string;
 }
 
 export interface ChatState {
@@ -24,8 +24,8 @@ export interface ChatThread {
   id: string;
   title: string;
   messages: ChatMessage[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface FitnessApiResponse {

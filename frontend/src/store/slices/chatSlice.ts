@@ -91,28 +91,27 @@ const chatSlice = createSlice({
     },
     
     startNewThread: (state) => {
+      const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
         title: 'New Chat',
         messages: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
       };
       state.currentThread = newThread;
     },
     
     addMessage: (state, action: PayloadAction<Omit<ChatMessage, 'id' | 'timestamp'>>) => {
       if (!state.currentThread) return;
-      
+      const now = new Date().toISOString();
       const message: ChatMessage = {
         id: generateMessageId(),
-        timestamp: new Date(),
+        timestamp: now,
         ...action.payload,
       };
-      
       state.currentThread.messages.push(message);
-      state.currentThread.updatedAt = new Date();
-      
+      state.currentThread.updatedAt = now;
       // Update title if it's the first user message
       if (action.payload.sender === 'user' && state.currentThread.title === 'New Chat') {
         state.currentThread.title = action.payload.text.slice(0, 30) + (action.payload.text.length > 30 ? '...' : '');
@@ -145,21 +144,22 @@ const chatSlice = createSlice({
     },
 
     createThreadWithWelcome: (state, action: PayloadAction<string>) => {
+      const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
         title: 'New Chat',
         messages: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
       };
       const welcomeMessage: ChatMessage = {
         id: generateMessageId(),
-        timestamp: new Date(),
+        timestamp: now,
         sender: 'ai',
         text: action.payload,
       };
       newThread.messages.push(welcomeMessage);
-      newThread.updatedAt = new Date();
+      newThread.updatedAt = now;
       state.currentThread = newThread;
       state.threads.push(newThread);
     },
