@@ -27,7 +27,7 @@ export const ChatInterface = () => {
 
   const handleSendMessage = async () => {
     if (!input.trim() || chatState.isLoading) return;
-
+    ('[UI] Send button clicked. Calling sendMessage');
     const message = input.trim();
     setInput('');
     

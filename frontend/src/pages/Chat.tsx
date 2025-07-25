@@ -46,7 +46,7 @@ const Chat = () => {
     }
   };
 
-  console.log('currentThread:', currentThread, 'chatStarted:', chatStarted);
+  ('currentThread:', currentThread, 'chatStarted:', chatStarted);
 
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>

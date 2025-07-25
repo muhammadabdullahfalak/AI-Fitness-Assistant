@@ -47,6 +47,7 @@ export const ProfileSetup = () => {
   const bmiInfo = getBMIInfo();
 
   const startChat = () => {
+    ('[UI] Start Your Fitness Journey button clicked. Dispatching setChatStarted and createThreadWithWelcome');
     // ...profile validation...
     const welcomeMessage = `🏋️ Welcome to your AI Fitness Assistant! I'm here to help you with personalized fitness advice based on your profile:\n\n👤 **Age:** ${userProfile.age}\n⚧ **Sex:** ${userProfile.sex}\n⚖️ **Weight:** ${userProfile.weight}kg\n\nFeel free to ask me anything about fitness, workouts, nutrition, or health! How can I help you today?`;
     dispatch(setChatStarted(true));

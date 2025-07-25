@@ -93,10 +93,12 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     updateUserProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {
+      ('[chatSlice] updateUserProfile', action.payload);
       state.userProfile = { ...state.userProfile, ...action.payload };
     },
     
     startNewThread: (state, action: PayloadAction<string>) => {
+      ('[chatSlice] startNewThread for user_id:', action.payload);
       const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
@@ -111,7 +113,10 @@ const chatSlice = createSlice({
     },
     
     addMessage: (state, action: PayloadAction<Omit<ChatMessage, 'id' | 'timestamp'>>) => {
-      if (!state.currentThread) return;
+      if (!state.currentThread) {
+        ('[chatSlice] addMessage called but currentThread is null');
+        return;
+      }
       const now = new Date().toISOString();
       const message: ChatMessage = {
         id: generateMessageId(),
@@ -120,6 +125,7 @@ const chatSlice = createSlice({
       };
       state.currentThread.messages.push(message);
       state.currentThread.updatedAt = now;
+      ('[chatSlice] addMessage', message);
 
       // Update title if it's the first user message
       if (action.payload.sender === 'user' && state.currentThread.title === 'New Chat') {
@@ -131,35 +137,43 @@ const chatSlice = createSlice({
           state.threads[idx].title = state.currentThread.title;
           state.threads[idx].updatedAt = now;
         }
+        ('[chatSlice] Updated thread title to:', state.currentThread.title);
       }
     },
     
     setCurrentThread: (state, action: PayloadAction<ChatThread | null>) => {
+      ('[chatSlice] setCurrentThread', action.payload);
       state.currentThread = action.payload;
     },
     
     updateCurrentThreadTitle: (state, action: PayloadAction<string>) => {
       if (state.currentThread) {
+        ('[chatSlice] updateCurrentThreadTitle', action.payload);
         state.currentThread.title = action.payload;
       }
     },
     
     clearError: (state) => {
+      ('[chatSlice] clearError');
       state.error = null;
     },
     
     clearCurrentThread: (state) => {
+      ('[chatSlice] clearCurrentThread');
       state.currentThread = null;
     },
 
     setChatStarted: (state, action: PayloadAction<boolean>) => {
+      ('[chatSlice] setChatStarted', action.payload);
       state.chatStarted = action.payload;
     },
     resetChatStarted: (state) => {
+      ('[chatSlice] resetChatStarted');
       state.chatStarted = false;
     },
 
     createThreadWithWelcome: (state, action: PayloadAction<{ user_id: string, welcome: string }>) => {
+      ('[chatSlice] createThreadWithWelcome', action.payload);
       const now = new Date().toISOString();
       const newThread: ChatThread = {
         id: generateThreadId(),
@@ -181,10 +195,12 @@ const chatSlice = createSlice({
       state.threads.unshift(newThread); // Add to top
     },
     enterNewChatMode: (state) => {
+      ('[chatSlice] enterNewChatMode');
       state.newChatMode = true;
       state.currentThread = null;
     },
     exitNewChatMode: (state) => {
+      ('[chatSlice] exitNewChatMode');
       state.newChatMode = false;
     },
   },
@@ -192,14 +208,17 @@ const chatSlice = createSlice({
     builder
       // Fetch chat history
       .addCase(fetchChatHistory.pending, (state) => {
+        ('[chatSlice] fetchChatHistory.pending');
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchChatHistory.fulfilled, (state, action) => {
+        ('[chatSlice] fetchChatHistory.fulfilled', action.payload);
         state.isLoading = false;
         state.threads = action.payload;
       })
       .addCase(fetchChatHistory.rejected, (state, action) => {
+        ('[chatSlice] fetchChatHistory.rejected', action.payload);
         state.isLoading = false;
         state.error = action.payload as string;
       })
@@ -207,6 +226,7 @@ const chatSlice = createSlice({
       // Save chat thread
       .addCase(saveChatThread.fulfilled, (state, action) => {
         const savedThread = action.payload;
+        ('[chatSlice] saveChatThread.fulfilled', savedThread);
         const existingIndex = state.threads.findIndex(t => t.id === savedThread.id);
         
         if (existingIndex >= 0) {
@@ -223,6 +243,7 @@ const chatSlice = createSlice({
       // Delete chat thread
       .addCase(deleteChatThread.fulfilled, (state, action) => {
         const deletedThreadId = action.payload;
+        ('[chatSlice] deleteChatThread.fulfilled', deletedThreadId);
         state.threads = state.threads.filter(t => t.id !== deletedThreadId);
         
         if (state.currentThread?.id === deletedThreadId) {

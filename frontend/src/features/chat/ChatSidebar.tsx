@@ -2,7 +2,7 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread, enterNewChatMode, exitNewChatMode } from '@/store/slices/chatSlice';
+import { setCurrentThread, clearCurrentThread, deleteChatThread, startNewThread, saveChatThread, enterNewChatMode, exitNewChatMode, resetChatStarted } from '@/store/slices/chatSlice';
 import { Link } from 'react-router-dom';
 import { 
   Sidebar,
@@ -25,7 +25,11 @@ export const ChatSidebar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleNewChat = () => {
+    if (!user) return;
+    ('[UI] New Chat button clicked. Dispatching enterNewChatMode');
+    dispatch(resetChatStarted());
     dispatch(enterNewChatMode());
+    // Removed setCurrentThread dispatch here
   };
 
   const handleSelectThread = async (threadId: string) => {
@@ -34,6 +38,7 @@ export const ChatSidebar = () => {
 
     // Save current chat if needed
     if (currentThread && currentThread.messages.length > 0 && user) {
+      ('[UI] Saving current thread before switching.');
       await dispatch(saveChatThread({ ...currentThread, user_id: user.id }));
     }
 
