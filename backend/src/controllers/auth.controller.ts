@@ -53,7 +53,6 @@ export const logout = async (_req: Request, res: Response) => {
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
-console.log(GOOGLE_CLIENT_ID);
 
 export const googleAuth = async (req: Request, res: Response) => {
   const { id_token } = req.body;

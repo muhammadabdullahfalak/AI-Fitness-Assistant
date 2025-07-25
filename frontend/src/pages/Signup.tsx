@@ -90,7 +90,7 @@ const Signup = () => {
   const handleGoogleSuccess = async (credentialResponse: any) => {
     if (credentialResponse.credential) {
       const result = await dispatch(googleLogin(credentialResponse.credential));
-      console.log(credentialResponse.credential)
+
       if ((result as any).meta.requestStatus === 'fulfilled') {
         toast({
           title: 'Welcome!',
@@ -107,7 +107,6 @@ const Signup = () => {
     }
   };
 
-  console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID);
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID as string}>
       <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
