@@ -32,7 +32,7 @@ const Home = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <h1 className="text-5xl md:text-6xl font-bold leading-tight">
             Your Personal{' '}
-            <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+            <span className="text-primary">
               AI Fitness Coach
             </span>
           </h1>
