@@ -9,12 +9,13 @@ export const API_ENDPOINTS = {
   LOGOUT: '/api/auth/logout',
   REFRESH: '/api/auth/refresh',
   PROFILE: '/api/auth/profile',
+  GOOGLE: '/api/auth/google',
   
   // Chat endpoints
   GEMINI: '/api/gemini',
   CHAT_HISTORY: '/api/chat/history',
   SAVE_CHAT: '/api/chat/save',
-  DELETE_CHAT: '/api/chat', // not '/api/chat/delete'
+  DELETE_CHAT: '/api/chat',
   
   // User data
   USER_PROFILE: '/api/user/profile',
